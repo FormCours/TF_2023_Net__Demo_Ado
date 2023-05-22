@@ -1,7 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 
 // ConnectionString 
-string connectionString = @"Server=Forma500\TFTIC;Database=Demo_ADO;User Id=Della;Password=Test1234=;TrustServerCertificate=true;";
+string connectionString = @"Server=Forma300\TFTIC;Database=Demo_ADO;User Id=Gontran;Password=Test1234=;TrustServerCertificate=true;";
 
 // Nuget package à installer → Microsoft.Data.SqlClient
 
@@ -29,3 +29,4 @@ Console.WriteLine($"Le nombre de jeu dans la DB : {nbGame}");
 demoConnection.Close();
 Console.WriteLine($"Etat de la connexion {demoConnection.State}");
 #endregion
+
