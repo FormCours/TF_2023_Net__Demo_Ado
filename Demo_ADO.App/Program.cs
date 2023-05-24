@@ -90,6 +90,8 @@ using(SqlConnection connection = new SqlConnection())
 
 #region Manipulation des Genres avec Procédures stockées
 /* Insertion d'un genre avec Param OUTPUT
+Genre new_genre = new Genre() { Name = "RTS", Description = "Real Time Strategy"};
+
 using (SqlConnection connection = new SqlConnection(connectionString))
 {
     //connection.ConnectionString = connectionString;
@@ -111,13 +113,20 @@ using (SqlConnection connection = new SqlConnection(connectionString))
             }
             );
         command.ExecuteNonQuery();
-        int id = (int)command.Parameters["id"].Value;
-        Console.WriteLine($"Le nouveau genre 'RTS' a l'identifiant {id}.");
+        new_genre.Id_Genre = (int)command.Parameters["id"].Value;
+        Console.WriteLine($"Le nouveau genre '{new_genre.Name}' a l'identifiant {new_genre.Id_Genre}.");
     }
     connection.Close();
 }*/
 
 /* Insertion de plusieurs genre avec un Param type TABLE*/
+
+List<Genre> genres_to_add = new List<Genre>() { 
+    new Genre(){ Name = "RTS", Description = "Real Time Strategy"},
+    new Genre(){ Name = "Horror", Description = null},
+    new Genre(){ Name = "Reflection", Description = null}
+};
+
 
 using (SqlConnection connection = new SqlConnection(connectionString))
 {
@@ -132,9 +141,10 @@ using (SqlConnection connection = new SqlConnection(connectionString))
         data.Columns.Add("Name", typeof(string));
         data.Columns.Add("Description", typeof(string));
         // On insert les données dans la table
-        data.Rows.Add("RTS", "Real Time Strategy");
-        data.Rows.Add("Horror", null);
-        data.Rows.Add("Reflection", null);
+        foreach (Genre genre in genres_to_add)
+        {
+            data.Rows.Add(genre.Name, genre.Description);
+        }
 
         cmd.Parameters.Add(
             new SqlParameter() { 
