@@ -1,8 +1,14 @@
 ﻿using Demo_ADO.App.Models;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
-// ConnectionString 
-string connectionString = @"Server=Forma300\TFTIC;Database=Demo_ADO;User Id=Gontran;Password=Test1234=;TrustServerCertificate=true;";
+#region ConnectionString 
+/* ConnectionString Centre
+ * string connectionString = @"Server=Forma300\TFTIC;Database=Demo_ADO;User Id=Gontran;Password=Test1234=;TrustServerCertificate=true;"; */
+
+/* ConnectionString LocalDB*/
+string connectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Demo_ADO_DB;Integrated Security=True";
+#endregion
 
 // Nuget package à installer → Microsoft.Data.SqlClient
 
@@ -80,4 +86,71 @@ using(SqlConnection connection = new SqlConnection())
         connection.Close();
     }
 }
+#endregion
+
+#region Manipulation des Genres avec Procédures stockées
+/* Insertion d'un genre avec Param OUTPUT
+using (SqlConnection connection = new SqlConnection(connectionString))
+{
+    //connection.ConnectionString = connectionString;
+    connection.Open();
+    using(SqlCommand command = connection.CreateCommand()){
+        command.CommandText = "SP_Genre_Insert";
+        command.CommandType = CommandType.StoredProcedure;
+        SqlParameter param_name = new SqlParameter() { 
+            ParameterName =  "name", 
+            Value="RTS" 
+        };
+        command.Parameters.Add(param_name);
+        command.Parameters.AddWithValue("description", "Real Time Strategy");
+        command.Parameters.Add(
+            new SqlParameter() { 
+                ParameterName= "id",
+                Value = 0,
+                Direction= ParameterDirection.Output
+            }
+            );
+        command.ExecuteNonQuery();
+        int id = (int)command.Parameters["id"].Value;
+        Console.WriteLine($"Le nouveau genre 'RTS' a l'identifiant {id}.");
+    }
+    connection.Close();
+}*/
+
+/* Insertion de plusieurs genre avec un Param type TABLE*/
+
+using (SqlConnection connection = new SqlConnection(connectionString))
+{
+    using (SqlCommand cmd = connection.CreateCommand())
+    {
+        cmd.CommandType = CommandType.StoredProcedure;
+        cmd.CommandText = "SP_Genre_InsertTable";
+
+        // On crée une table
+        DataTable data = new DataTable();
+        // On défini la structure de la table
+        data.Columns.Add("Name", typeof(string));
+        data.Columns.Add("Description", typeof(string));
+        // On insert les données dans la table
+        data.Rows.Add("RTS", "Real Time Strategy");
+        data.Rows.Add("Horror", null);
+        data.Rows.Add("Reflection", null);
+
+        cmd.Parameters.Add(
+            new SqlParameter() { 
+                ParameterName = "genres",
+                Value = data,
+                TypeName = "T_Genre"
+            });
+
+        connection.Open();
+
+        int nb_inserted_row = cmd.ExecuteNonQuery();
+
+        Console.WriteLine($"On a ajouté {nb_inserted_row} genre{((nb_inserted_row>1)?"s":"")}");
+
+        connection.Close();
+    }
+}
+
 #endregion

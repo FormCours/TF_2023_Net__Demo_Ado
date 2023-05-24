@@ -62,6 +62,7 @@
     <Folder Include="Tables" />
     <Folder Include="Seeds" />
     <Folder Include="Views" />
+    <Folder Include="StoredProcedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Genre.sql" />
@@ -69,6 +70,12 @@
     <Build Include="Tables\Game.sql" />
     <Build Include="Tables\Game_Genre.sql" />
     <Build Include="Views\V_Game.sql" />
+    <Build Include="StoredProcedures\SP_Genre_Insert.sql" />
+    <Build Include="StoredProcedures\SP_Genre_SelectAll.sql" />
+    <Build Include="StoredProcedures\SP_Genre_Select.sql" />
+    <Build Include="StoredProcedures\SP_Genre_Update.sql" />
+    <Build Include="StoredProcedures\SP_Genre_Delete.sql" />
+    <Build Include="StoredProcedures\SP_Genre_InsertTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Demo_ADO.DB.refactorlog" />
@@ -78,5 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Demo_ADO.DB.publish.xml" />
+    <None Include="Demo_ADO.LocalDB.publish.xml" />
   </ItemGroup>
 </Project>
