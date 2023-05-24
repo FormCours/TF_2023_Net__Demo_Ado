@@ -163,4 +163,15 @@ using (SqlConnection connection = new SqlConnection(connectionString))
     }
 }
 
+using (SqlConnection connection = new SqlConnection(connectionString))
+{
+    using (SqlCommand cmd = connection.CreateCommand())
+    {
+        cmd.CommandText = "DELETE FROM [Game]";
+        connection.Open();
+        cmd.ExecuteNonQuery();
+        connection.Close();
+    }
+}
+
 #endregion
